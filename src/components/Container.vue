@@ -1,5 +1,7 @@
 <template>
-  <SearchResult :movieList = movieList />
+  <div class="movieBox">
+    <SearchResult v-for="movie in movieList" :key="movie" :movie = movie :movieList = movieList />
+  </div>
 </template>
 
 <script>
@@ -22,5 +24,8 @@ export default {
 </script>
 
 <style>
-
+.movieBox{
+  display: flex;
+  flex-wrap: wrap;
+}
 </style>

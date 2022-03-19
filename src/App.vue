@@ -2,7 +2,6 @@
   <div class="header">
     content searcher
     <p class="webTitle">Video Finder</p>
-    <div class=""></div>
   </div>
 
   <div class="search_area">
@@ -54,6 +53,7 @@ export default {
   border: none;
   color: #999;
   font-size: 20px;
+  border-radius: 7px;
 }
 
 .search_area{
@@ -75,7 +75,7 @@ button{
   width: 50px;
   height: 50px;
   top: -5px;
-  right: 8px;
+  right: 0px;
   z-index: 1;
   font-size: 25px;
 }
