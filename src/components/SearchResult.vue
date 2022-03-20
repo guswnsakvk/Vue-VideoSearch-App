@@ -1,8 +1,8 @@
 <template>
-  <div class="moviePoster" :style="{backgroundImage : `url(${movie.large_cover_image})`}">
+  <div class="moviePoster" :style="{backgroundImage : `url(${video.large_cover_image})`}">
     <div class="movieDescription">
-      <p class="movieTitle">{{movie.title}}</p>
-      <p class="movieYear">{{movie.year}}</p>
+      <p class="movieTitle">{{video.title}}</p>
+      <p class="movieYear">{{video.year}}</p>
     </div>
   </div>
 </template>
@@ -11,7 +11,7 @@
 export default {
   name: 'SearchResult',
   props: {
-    movie: Object
+    video: Object
   }
 }
 </script>

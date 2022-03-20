@@ -5,13 +5,13 @@
   </div>
 
   <div class="search_area">
-    <form>
-      <input required class="search_bar" type="text" placeholder="Search for the title of the content">
+    <form @submit.prevent="searchVideo">
+      <input v-model="videoName" required class="search_bar" type="text" placeholder="Search for the title of the content">
       <button type="submit" class="fa-solid fa-magnifying-glass searchIcon"></button>
     </form>
   </div>
 
-  <Container :movieList = movieList />
+  <Container :videoList = videoList />
 </template>
 
 <script>
@@ -22,14 +22,25 @@ export default {
   name: 'App',
   data(){
     return{
-      movieList : [],
+      videoList : [],
+      videoName : '' ,
     }
   },
   components: {
     Container
   },
   methods: {
-    
+    searchVideo(){
+      console.log(this.videoName)
+      this.videoList = []
+      axios
+        .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25`)
+        .then((response) => {
+          for (let i=0; i<response.data.data.limit;i++){
+            this.videoList.push(response.data.data.movies[i])
+        }
+      })
+    }
   },
   mounted(){
     this.$nextTick(function(){
@@ -37,7 +48,7 @@ export default {
         .get('https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25')
         .then((response) => {
           for (let i=0; i<response.data.data.limit;i++){
-            this.movieList.push(response.data.data.movies[i])
+            this.videoList.push(response.data.data.movies[i])
         }
       })
     })

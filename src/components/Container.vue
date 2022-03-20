@@ -1,6 +1,6 @@
 <template>
   <div class="movieBox">
-    <SearchResult v-for="movie in movieList" :key="movie" :movie = movie :movieList = movieList />
+    <SearchResult v-for="video in videoList" :key="video" :video = video />
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
     }
   },
   props: {
-   movieList: Array
+   videoList: Array
   },
   components: {
     SearchResult
