@@ -1,7 +1,9 @@
 <template>
   <div class="header">
-    content searcher
-    <p class="webTitle">Video Finder</p>
+    <div class="webName" @click="resetMovieList">
+      <span>content searcher</span>
+      <p class="webTitle">Video Finder</p>
+    </div>
   </div>
 
   <div class="search_area">
@@ -31,10 +33,19 @@ export default {
   },
   methods: {
     searchVideo(){
-      console.log(this.videoName)
       this.videoList = []
       axios
         .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25`)
+        .then((response) => {
+          for (let i=0; i<response.data.data.limit;i++){
+            this.videoList.push(response.data.data.movies[i])
+        }
+      })
+    },
+    resetMovieList(){
+      this.videoList = []
+      axios
+        .get('https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25')
         .then((response) => {
           for (let i=0; i<response.data.data.limit;i++){
             this.videoList.push(response.data.data.movies[i])
@@ -98,6 +109,11 @@ button{
   color: #999;
   display: flex;
   font-size: 20px;
+}
+
+.webName{
+  display: flex;
+  cursor: pointer;
 }
 
 .webTitle{
