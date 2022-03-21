@@ -1,13 +1,13 @@
 <template>
   <div class="header">
-    <div class="webName" @click="resetMovieList">
+    <div class="webName" @click="likeMovieList(1), videoList = [], nowPage = 1">
       <span>content searcher</span>
       <p class="webTitle">Video Finder</p>
     </div>
   </div>
 
   <div class="search_area">
-    <form @submit.prevent="searchVideo">
+    <form @submit.prevent="searchVideo(1), videoList=[], nowPage = 1">
       <input v-model="videoName" required class="search_bar" type="text" placeholder="Search for the title of the content">
       <button type="submit" class="fa-solid fa-magnifying-glass searchIcon"></button>
     </form>
@@ -26,44 +26,69 @@ export default {
     return{
       videoList : [],
       videoName : '' ,
+      nowPage : 1,
+      lastPage : 0,
+      search : false
     }
   },
   components: {
     Container
   },
   methods: {
-    searchVideo(){
-      this.videoList = []
+    searchVideo(page){
+      this.search = true
       axios
-        .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25`)
+        .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}`)
         .then((response) => {
+          this.lastPage = Math.ceil(response.data.data.movie_count / 25)
+          for (let i=0; i<response.data.data.movies.length;i++){
+            this.videoList.push(response.data.data.movies[i])
+        }
+      })
+    },
+    likeMovieList(page){
+      this.search = false
+      axios
+        .get(`https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}`)
+        .then((response) => {
+          this.lastPage = Math.ceil(response.data.data.movie_count / 25)
           for (let i=0; i<response.data.data.limit;i++){
             this.videoList.push(response.data.data.movies[i])
         }
       })
     },
-    resetMovieList(){
-      this.videoList = []
-      axios
-        .get('https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25')
-        .then((response) => {
-          for (let i=0; i<response.data.data.limit;i++){
-            this.videoList.push(response.data.data.movies[i])
+    onScroll(){
+      if(this.search == true){
+        if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
+          this.nowPage += 1
+          this.searchVideo(this.nowPage)
         }
-      })
+      }
+      else{
+        if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
+          this.nowPage += 1
+          this.likeMovieList(this.nowPage)
+        }
+      }
     }
   },
   mounted(){
     this.$nextTick(function(){
+      this.nowPage = 1
       axios
         .get('https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25')
         .then((response) => {
+          this.lastPage = Math.ceil(response.data.data.movie_count / 25)
           for (let i=0; i<response.data.data.limit;i++){
             this.videoList.push(response.data.data.movies[i])
         }
       })
     })
-  }
+    window.addEventListener('scroll', this.onScroll)
+  },
+  beforeUnmount(){
+    window.removeEventListener('scroll', this.onScroll)
+  },
 }
 </script>
 
