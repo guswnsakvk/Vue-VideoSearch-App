@@ -1,5 +1,5 @@
 <template>
-  <div class="moviePoster" :style="{backgroundImage : `url(${video.large_cover_image})`}">
+  <div @click="clickVideoPoster" class="moviePoster" :style="{backgroundImage : `url(${video.large_cover_image})`}">
     <div class="movieDescription">
       <p class="movieTitle">{{video.title}}</p>
       <p class="movieYear">{{video.year}}</p>
@@ -10,8 +10,18 @@
 <script>
 export default {
   name: 'SearchResult',
+  data(){
+    return {
+      
+    }
+  },
   props: {
-    video: Object
+    video: Object,
+  },
+  methods: {
+    clickVideoPoster(){
+      this.$emit('passDetailData', this.video)
+    }
   }
 }
 </script>

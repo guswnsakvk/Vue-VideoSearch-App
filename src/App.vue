@@ -13,7 +13,7 @@
     </form>
   </div>
 
-  <Container :videoList = videoList />
+  <Container @passSelected = getSelected :videoList = videoList :selected = selected />
 </template>
 
 <script>
@@ -28,7 +28,8 @@ export default {
       videoName : '' ,
       nowPage : 1,
       lastPage : 0,
-      search : false
+      search : false,
+      selected : false
     }
   },
   components: {
@@ -37,6 +38,7 @@ export default {
   methods: {
     searchVideo(page){
       this.search = true
+      this.selected = false
       axios
         .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}`)
         .then((response) => {
@@ -47,7 +49,7 @@ export default {
       })
     },
     likeMovieList(page){
-      this.search = false
+      this.selected = false
       axios
         .get(`https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}`)
         .then((response) => {
@@ -58,18 +60,23 @@ export default {
       })
     },
     onScroll(){
-      if(this.search == true){
-        if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
-          this.nowPage += 1
-          this.searchVideo(this.nowPage)
+      if(!this.selected){
+          if(this.search){
+          if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
+            this.nowPage += 1
+            this.searchVideo(this.nowPage)
+          }
+        }
+        else{
+          if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
+            this.nowPage += 1
+            this.likeMovieList(this.nowPage)
+          }
         }
       }
-      else{
-        if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
-          this.nowPage += 1
-          this.likeMovieList(this.nowPage)
-        }
-      }
+    },
+    getSelected(response){
+      this.selected = response
     }
   },
   mounted(){
