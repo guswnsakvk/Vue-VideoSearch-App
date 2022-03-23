@@ -61,7 +61,7 @@ export default {
     },
     onScroll(){
       if(!this.selected){
-          if(this.search){
+        if(this.search){
           if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
             this.nowPage += 1
             this.searchVideo(this.nowPage)

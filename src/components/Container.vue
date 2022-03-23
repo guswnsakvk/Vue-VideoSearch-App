@@ -5,13 +5,14 @@
     </div>
 
     <div v-if="selected" class="test">
-      <p>{{selectedVideo.title}}</p>
+      <DeatilVideo :selectedVideo = selectedVideo />
     </div>
   </div>
 </template>
 
 <script>
 import SearchResult from './SearchResult.vue'
+import DeatilVideo from './DeatilVideo.vue'
 
 export default {
   name: 'Container',
@@ -25,7 +26,8 @@ export default {
    selected: Boolean
   },
   components: {
-    SearchResult
+    SearchResult,
+    DeatilVideo
   },
   methods: {
     getDetailData(response){
@@ -38,10 +40,6 @@ export default {
 </script>
 
 <style>
-.test{
-  color: #fff
-}
-
 .movieBox{
   display: flex;
   flex-wrap: wrap;
