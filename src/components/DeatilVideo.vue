@@ -1,32 +1,18 @@
 <template>
-  <div class="deatilVideoContainer">
-    <div class="leftSide">
-      <div class="detailVideoPoster" :style="{backgroundImage : `url(${selectedVideo.large_cover_image})`}"></div>
-      <div class="detailVideoInfo">
-        <div class="videoInfo">
-          <div class="infoTitle">Rating</div>
-          <div class="infoValue">{{selectedVideo.rating}}</div>
-        </div>
-        <div class="videoInfo">
-          <div class="infoTitle">Genres</div>
-          <div class="infoValue">{{selectedVideo.genres.join(' ')}}</div>
-        </div>
-        <div class="videoInfo">
-          <div class="infoTitle">RunTime</div>
-          <div class="infoValue">{{selectedVideo.runtime}}min</div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="rightSide">
-      <div class="detailVideoContent">
-        <div class="title">
-          <span class="videoTitle">{{selectedVideo.title}}</span>
-          <span class="videoYear">({{selectedVideo.year}})</span>
-        </div>
-        <p class="videoSynopsis">{{selectedVideo.synopsis}}</p>
-      </div>
-    </div>
+  <div class="container">
+    <div class="videoPoster" :style="{backgroundImage : `url(${selectedVideo.large_cover_image})`}"></div>
+    <div class="videoInfo">
+      <p class="Title">{{selectedVideo.title}}</p>
+      <p class="yearAndRun">{{selectedVideo.year}} {{selectedVideo.runtime}}min</p>
+      <p class="detailTitle">Genres</p>
+      <p class="genres">{{selectedVideo.genres.join(' ')}}</p>
+      <p class="detailTitle">Synopsis</p>
+      <p class="synopsis">{{selectedVideo.synopsis}}</p>
+      <p class="detailTitle">MappRating</p>
+      <p class="mpa">{{selectedVideo.mpa_rating}}</p>
+      <p class="detailTitle">Rating</p>
+      <p class="rating">{{selectedVideo.rating}}</p>
+    </div>  
   </div>
 </template>
 
@@ -46,72 +32,56 @@ export default {
 </script>
 
 <style>
-.videoSynopsis{
-  font-size: 20px;
+.rating{
+  color: #999;
 }
 
-.videoYear{
-  font-size: 20px;
+.synopsis{
+  margin-bottom: 30px;
+  color: #999;
 }
 
-.videoTitle{
-  font-size: 40px;
-  margin-bottom: 20px;
+.mpa{
+  margin-bottom: 30px;
+  color: #999;
 }
 
-.title{
-  margin-bottom: 20px;
+.detailTitle{
+  font-size: 25px;
 }
 
-.infoValue{
-  width: 100%;
+.genres{
+  margin-bottom: 30px;
+  color: #999;
 }
 
-.rightSide{
-  margin-left: 20px;
+.yearAndRun{
+  margin-bottom: 30px;
 }
 
-.infoTitle{
-  height: 100%;
-  width: 110px;
+.Title{
+  font-size: 50px;
+  margin-bottom: 30px;
 }
 
 .videoInfo{
-  width: 100%;
-  height: 50px;
-  display: flex;
-  font-size: 18px;
+  width: 500px;
+  margin-left: 50px;
+  color: #fff;
+  font-size: 20px;
 }
 
-.detailVideoContent{
-  width: 650px;
-  height: 300px;
-  margin-top: 100px;
-}
-
-.detailVideoInfo{
-  width: 350px;
-  height: 100px;
-  color: #999;
-  margin-top: 10px;
-}
-
-.detailVideoPoster{
-  width: 350px;
-  height: 500px;
+.videoPoster{
+  width: 400px;
+  height: 600px;
+  border-radius: 10px;
+  background-repeat: no-repeat;
   background-size: 100% auto;
 }
 
-.deatilVideoContainer{
-  margin: auto;
-  margin-top: 15px;
+.container{
   width: 100%;
-  max-width: 1100px;
-  height: 800px;
+  padding: 20px 0 0 80px;
   display: flex;
-}
-
-.test{
-  color: #fff
 }
 </style>

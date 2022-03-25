@@ -13,6 +13,7 @@
 <script>
 import SearchResult from './SearchResult.vue'
 import DeatilVideo from './DeatilVideo.vue'
+import axios from 'axios'
 
 export default {
   name: 'Container',
@@ -31,8 +32,9 @@ export default {
   },
   methods: {
     getDetailData(response){
+      axios
       this.selectedVideo = response
-      console.log(this.selectedVideo)
+      console.log(response)
       this.$emit('passSelected', true)
     }
   }
