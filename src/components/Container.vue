@@ -4,7 +4,7 @@
       <SearchResult @passDetailData="getDetailData" v-for="video in videoList" :key="video" :video = video />
     </div>
 
-    <div v-if="selected" class="test">
+    <div v-if="selected">
       <DeatilVideo :selectedVideo = selectedVideo />
     </div>
   </div>
@@ -13,7 +13,6 @@
 <script>
 import SearchResult from './SearchResult.vue'
 import DeatilVideo from './DeatilVideo.vue'
-import axios from 'axios'
 
 export default {
   name: 'Container',
@@ -32,9 +31,7 @@ export default {
   },
   methods: {
     getDetailData(response){
-      axios
       this.selectedVideo = response
-      console.log(response)
       this.$emit('passSelected', true)
     }
   }

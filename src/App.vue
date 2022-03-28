@@ -12,6 +12,10 @@
       <button type="submit" class="fa-solid fa-magnifying-glass searchIcon"></button>
     </form>
   </div>
+  
+  <div class="btnContainer">
+    <Genres @click="choseGenres(genres)" v-for="genres in genresList" :key="genres" :genres = genres />
+  </div>
 
   <Container @passSelected = getSelected :videoList = videoList :selected = selected />
 </template>
@@ -19,6 +23,7 @@
 <script>
 import axios from 'axios'
 import Container from './components/Container.vue'
+import Genres from './components/Genres.vue'
 
 export default {
   name: 'App',
@@ -29,11 +34,14 @@ export default {
       nowPage : 1,
       lastPage : 0,
       search : false,
-      selected : false
+      selected : false,
+      genresList : ['Action', 'Adventure', 'Comedy', 'Sci-Fi', 'Crime', 'Thriller'],
+      selectedGenres : []
     }
   },
   components: {
-    Container
+    Container,
+    Genres
   },
   methods: {
     searchVideo(page){
@@ -77,6 +85,14 @@ export default {
     },
     getSelected(response){
       this.selected = response
+    },
+    choseGenres(response){
+      if(this.selectedGenres.includes(response)){
+        this.selectedGenres = this.selectedGenres.filter((element) => element != response)
+      }else{
+        this.selectedGenres.push(response)
+      }
+      console.log(this.selectedGenres)
     }
   },
   mounted(){
@@ -100,6 +116,13 @@ export default {
 </script>
 
 <style>
+.btnContainer{
+  display: flex;
+  cursor: pointer;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
 .search_bar{
   width: 100%;
   height: 36px;
