@@ -16,7 +16,7 @@ export default {
   },
   props: {
     genres: String,
-    selectedGenres: Array
+    selectedGenres: String
   }
 }
 </script>
@@ -26,12 +26,13 @@ export default {
   color: #fff;
   font-size: 18px;
   background-color: #a734ff;
-  width: 100px;
+  width: 110px;
   height: 30px;
   text-align: center;
   border-radius: 15px;
   line-height: 30px;
   margin-right: 20px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 </style>

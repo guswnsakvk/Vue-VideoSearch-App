@@ -1,13 +1,13 @@
 <template>
   <div class="header">
-    <div class="webName" @click="likeMovieList(1), videoList = [], selectedGenres = [], nowPage = 1">
+    <div class="webName" @click="likeMovieList(1), videoList = [], selectedGenres = '', nowPage = 1">
       <span>content searcher</span>
       <p class="webTitle">Video Finder</p>
     </div>
   </div>
 
   <div class="search_area">
-    <form @submit.prevent="searchVideo(1), videoList=[], selectedGenres = [], nowPage = 1">
+    <form @submit.prevent="searchVideo(1), videoList=[], selectedGenres = '', nowPage = 1">
       <input v-model="videoName" required class="search_bar" type="text" placeholder="Search for the title of the content">
       <button type="submit" class="fa-solid fa-magnifying-glass searchIcon"></button>
     </form>
@@ -36,7 +36,7 @@ export default {
       search : false,
       selected : false,
       genresList : ['Action', 'Adventure', 'Comedy', 'Sci-Fi', 'Crime', 'Thriller'],
-      selectedGenres : []
+      selectedGenres : ''
     }
   },
   components: {
@@ -48,7 +48,7 @@ export default {
       this.search = true
       this.selected = false
       axios
-        .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}&genre=${this.selectedGenres.join(' ')}`)
+        .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}&genre=${this.selectedGenres}`)
         .then((response) => {
           this.lastPage = Math.ceil(response.data.data.movie_count / 25)
           for (let i=0; i<response.data.data.movies.length;i++){
@@ -60,7 +60,7 @@ export default {
       this.search = false
       this.selected = false
       axios
-        .get(`https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}&genre=${this.selectedGenres.join(' ')}`)
+        .get(`https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}&genre=${this.selectedGenres}`)
         .then((response) => {
           this.lastPage = Math.ceil(response.data.data.movie_count / 25)
           for (let i=0; i<response.data.data.limit;i++){
@@ -89,18 +89,20 @@ export default {
     },
     getChoseGenres(response){
       this.videoList = []
-      if(this.selectedGenres.includes(response)){
-        this.selectedGenres = this.selectedGenres.filter((element) => element != response)
-      }else{
-        this.selectedGenres.push(response)
-      }
+      // if(this.selectedGenres.includes(response)){
+      //   this.selectedGenres = this.selectedGenres.filter((element) => element != response)
+      // }else{
+      //   this.selectedGenres.push(response)
+      // }
+
+      this.selectedGenres =  response
+      console.log(this.selectedGenres)
 
       if(this.search){
         this.searchVideo(1)
       }else{
         this.likeMovieList(1)
       }
-      console.log(this.selectedGenres)
     }
     
   },
@@ -127,7 +129,6 @@ export default {
 <style>
 .btnContainer{
   display: flex;
-  cursor: pointer;
   flex-wrap: wrap;
   margin-top: 20px;
 }
