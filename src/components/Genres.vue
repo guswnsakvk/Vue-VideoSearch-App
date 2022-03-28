@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="genresBtn">
+    <div @click="choseGenres(genres)" class="genresBtn">
       #{{genres}}
     </div>
   </div>
@@ -9,8 +9,14 @@
 <script>
 export default {
   name: 'Generes',
+  methods: {
+    choseGenres(genres){
+      this.$emit('passChoseGenres', genres)
+    }
+  },
   props: {
-    genres: String
+    genres: String,
+    selectedGenres: Array
   }
 }
 </script>

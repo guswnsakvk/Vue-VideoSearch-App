@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!selected" class="movieBox" >
-      <SearchResult @passDetailData="getDetailData" v-for="video in videoList" :key="video" :video = video />
+      <SearchResult @passDetailData ="getDetailData" v-for="video in videoList" :key="video" :video = video />
     </div>
 
     <div v-if="selected">

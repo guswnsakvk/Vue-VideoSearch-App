@@ -1,20 +1,20 @@
 <template>
   <div class="header">
-    <div class="webName" @click="likeMovieList(1), videoList = [], nowPage = 1">
+    <div class="webName" @click="likeMovieList(1), videoList = [], selectedGenres = [], nowPage = 1">
       <span>content searcher</span>
       <p class="webTitle">Video Finder</p>
     </div>
   </div>
 
   <div class="search_area">
-    <form @submit.prevent="searchVideo(1), videoList=[], nowPage = 1">
+    <form @submit.prevent="searchVideo(1), videoList=[], selectedGenres = [], nowPage = 1">
       <input v-model="videoName" required class="search_bar" type="text" placeholder="Search for the title of the content">
       <button type="submit" class="fa-solid fa-magnifying-glass searchIcon"></button>
     </form>
   </div>
   
-  <div class="btnContainer">
-    <Genres @click="choseGenres(genres)" v-for="genres in genresList" :key="genres" :genres = genres />
+  <div class="btnContainer" v-if="!selected">
+    <Genres @passChoseGenres = getChoseGenres v-for="genres in genresList" :key="genres" :genres = genres :selectedGenres = selectedGenres />
   </div>
 
   <Container @passSelected = getSelected :videoList = videoList :selected = selected />
@@ -48,7 +48,7 @@ export default {
       this.search = true
       this.selected = false
       axios
-        .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}`)
+        .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}&genre=${this.selectedGenres.join(' ')}`)
         .then((response) => {
           this.lastPage = Math.ceil(response.data.data.movie_count / 25)
           for (let i=0; i<response.data.data.movies.length;i++){
@@ -57,9 +57,10 @@ export default {
       })
     },
     likeMovieList(page){
+      this.search = false
       this.selected = false
       axios
-        .get(`https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}`)
+        .get(`https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}&genre=${this.selectedGenres.join(' ')}`)
         .then((response) => {
           this.lastPage = Math.ceil(response.data.data.movie_count / 25)
           for (let i=0; i<response.data.data.limit;i++){
@@ -86,14 +87,22 @@ export default {
     getSelected(response){
       this.selected = response
     },
-    choseGenres(response){
+    getChoseGenres(response){
+      this.videoList = []
       if(this.selectedGenres.includes(response)){
         this.selectedGenres = this.selectedGenres.filter((element) => element != response)
       }else{
         this.selectedGenres.push(response)
       }
+
+      if(this.search){
+        this.searchVideo(1)
+      }else{
+        this.likeMovieList(1)
+      }
       console.log(this.selectedGenres)
     }
+    
   },
   mounted(){
     this.$nextTick(function(){
