@@ -84,4 +84,47 @@ export default {
   padding: 20px 0 0 80px;
   display: flex;
 }
+
+@media screen and (max-width: 576px) {
+  .container {
+    display: block;
+    padding: 20px 0 0 40px;
+  }
+
+  .videoPoster {
+    width: 320px;
+    height: 500px;
+  }
+
+  .videoInfo {
+    width: 320px;
+    margin-left: 10px;
+    font-size: 15px;
+  }
+
+  .synopsis {
+    margin-bottom: 15px;
+  }
+
+  .mpa {
+    margin-bottom: 15px;
+  }
+
+  .detailTitle {
+    font-size: 20px;
+  }
+
+  .genres {
+    margin-bottom: 15px;
+  }
+
+  .yearAndRun {
+    margin-bottom: 15px;
+  }
+
+  .Title {
+    font-size: 30px;
+    margin-bottom: 15px;
+  }
+}
 </style>

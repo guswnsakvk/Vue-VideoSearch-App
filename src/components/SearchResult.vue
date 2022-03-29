@@ -62,4 +62,13 @@ export default {
 .movieYear {
   margin-left: 10px;
 }
+
+@media screen and (max-width: 576px){
+  .moviePoster{
+    width: 170px;
+    height: 220px;
+    margin-left: 20px;
+    margin-right: 7px;
+  }
+}
 </style>

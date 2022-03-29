@@ -35,4 +35,11 @@ export default {
   margin-bottom: 10px;
   cursor: pointer;
 }
+
+@media screen and (max-width: 576px) {
+  .genresBtn {
+    font-size: 16px;
+    width: 100px;
+  }
+}
 </style>

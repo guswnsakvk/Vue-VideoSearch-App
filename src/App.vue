@@ -2,9 +2,7 @@
   <div class="header">
     <div
       class="webName"
-      @click="
-        resetGenres() ,homeVideoList(1), (videoList = []), (nowPage = 1)
-      "
+      @click="resetGenres(), homeVideoList(1), (videoList = []), (nowPage = 1)"
     >
       <span>content searcher</span>
       <p class="webTitle">Video Finder</p>
@@ -52,18 +50,18 @@
 import axios from "axios";
 import Container from "./components/Container.vue";
 import Genres from "./components/Genres.vue";
-
 export default {
   name: "App",
   data() {
     return {
-      videoList: [],  // 비디오 목록 저장
-      videoName: "",  // 비디오 이름 저장
+      videoList: [], // 비디오 목록 저장
+      videoName: "", // 비디오 이름 저장
       nowPage: 1, // 현재 페이지
-      lastPage: 0,  // 검색한 비디오 목록 마지막 페이지
-      search: false,  // 비디오 이름으로 검색했는 지 확인
-      selected: false,  // 비디오 포스터를 클릭했는 지 확인
-      genresList: [ // 비디오 장르 목록
+      lastPage: 0, // 검색한 비디오 목록 마지막 페이지
+      search: false, // 비디오 이름으로 검색했는 지 확인
+      selected: false, // 비디오 포스터를 클릭했는 지 확인
+      genresList: [
+        // 비디오 장르 목록
         "Action",
         "Adventure",
         "Comedy",
@@ -71,7 +69,7 @@ export default {
         "Crime",
         "Thriller",
       ],
-      selectedGenres: '', // 장르를 선택했는 지 확인
+      selectedGenres: "", // 장르를 선택했는 지 확인
     };
   },
   components: {
@@ -140,15 +138,14 @@ export default {
       this.selected = response;
     },
     // 비디오를 검색하거나 배너를 눌렀을 경우 장르 초기화
-    resetGenres(){
-      this.selectedGenres = '';
+    resetGenres() {
+      this.selectedGenres = "";
     },
     // 장르를 선택할 경우
     // 장르 저장
     getChoseGenres(response) {
       this.videoList = [];
       this.selectedGenres = response;
-
       if (this.search) {
         this.searchVideo(1);
       } else {
@@ -161,7 +158,7 @@ export default {
     // 인기 순으로 비디오 목록 검색
     this.$nextTick(function () {
       this.nowPage = 1;
-      this.homeVideoList(1)
+      this.homeVideoList(1);
     });
     window.addEventListener("scroll", this.onScroll);
   },
@@ -177,7 +174,6 @@ export default {
   flex-wrap: wrap;
   margin-top: 20px;
 }
-
 .search_bar {
   width: 100%;
   height: 36px;
@@ -187,20 +183,17 @@ export default {
   font-size: 20px;
   border-radius: 7px;
 }
-
 .search_area {
   height: 36px;
   width: 100%;
   position: relative;
   flex-direction: column;
 }
-
 button {
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
-
 .searchIcon {
   color: #fff;
   position: absolute;
@@ -211,7 +204,6 @@ button {
   z-index: 1;
   font-size: 25px;
 }
-
 .header {
   width: 100%;
   height: 50px;
@@ -220,24 +212,41 @@ button {
   display: flex;
   font-size: 20px;
 }
-
 .webName {
   display: flex;
   cursor: pointer;
 }
-
 .webTitle {
   margin-left: 5px;
   color: #a734ff;
 }
-
 body {
   background-color: #141414;
 }
-
 #app {
   width: 100%;
   max-width: 1200px;
   margin: auto;
+}
+
+@media screen and (max-width: 576px) {
+  .header {
+    margin-left: 15px;
+  }
+
+  .search_area {
+    margin-left: 15px;
+    width: 95%;
+  }
+
+  .btnContainer {
+    margin-left: 15px;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 576px;
+    margin: auto;
+  }
 }
 </style>
