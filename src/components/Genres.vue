@@ -1,28 +1,28 @@
 <template>
+  <!-- 비디오 장르를 보여줌
+  선택한 장르를 App.vue에 전달 -->
   <div>
-    <div @click="choseGenres(genres)" class="genresBtn">
-      #{{genres}}
-    </div>
+    <div @click="choseGenres(genres)" class="genresBtn">#{{ genres }}</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Generes',
+  name: "Generes",
   methods: {
-    choseGenres(genres){
-      this.$emit('passChoseGenres', genres)
-    }
+    choseGenres(genres) {
+      this.$emit("passChoseGenres", genres);
+    },
   },
   props: {
     genres: String,
-    selectedGenres: String
-  }
-}
+    selectedGenres: String,
+  },
+};
 </script>
 
 <style>
-.genresBtn{
+.genresBtn {
   color: #fff;
   font-size: 18px;
   background-color: #a734ff;

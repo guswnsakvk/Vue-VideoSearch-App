@@ -1,77 +1,77 @@
 <template>
+  <!-- 선택한 비디오의 정보를 보여주는 컴포넌트 -->
   <div class="container">
-    <div class="videoPoster" :style="{backgroundImage : `url(${selectedVideo.large_cover_image})`}"></div>
+    <div
+      class="videoPoster"
+      :style="{ backgroundImage: `url(${selectedVideo.large_cover_image})` }"
+    ></div>
     <div class="videoInfo">
-      <p class="Title">{{selectedVideo.title}}</p>
-      <p class="yearAndRun">{{selectedVideo.year}} {{selectedVideo.runtime}}min</p>
+      <p class="Title">{{ selectedVideo.title }}</p>
+      <p class="yearAndRun">
+        {{ selectedVideo.year }} {{ selectedVideo.runtime }}min
+      </p>
       <p class="detailTitle">Genres</p>
-      <p class="genres">{{selectedVideo.genres.join(' ')}}</p>
+      <p class="genres">{{ selectedVideo.genres.join(" ") }}</p>
       <p class="detailTitle">Synopsis</p>
-      <p class="synopsis">{{selectedVideo.synopsis}}</p>
+      <p class="synopsis">{{ selectedVideo.synopsis }}</p>
       <p class="detailTitle">MappRating</p>
-      <p class="mpa">{{selectedVideo.mpa_rating}}</p>
+      <p class="mpa">{{ selectedVideo.mpa_rating }}</p>
       <p class="detailTitle">Rating</p>
-      <p class="rating">{{selectedVideo.rating}}</p>
-    </div>  
+      <p class="rating">{{ selectedVideo.rating }}</p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'DeatilVideo',
-  data(){
-    return{
-
-    }
-  },
+  name: "DeatilVideo",
   props: {
-    selectedVideo: Object
-  }
-  
-}
+    selectedVideo: Object,
+  },
+};
 </script>
 
 <style>
-.rating{
+.rating {
   color: #999;
 }
 
-.synopsis{
+.synopsis {
   margin-bottom: 30px;
   color: #999;
 }
 
-.mpa{
+.mpa {
   margin-bottom: 30px;
   color: #999;
 }
 
-.detailTitle{
+.detailTitle {
   font-size: 25px;
 }
 
-.genres{
+.genres {
   margin-bottom: 30px;
   color: #999;
 }
 
-.yearAndRun{
+.yearAndRun {
   margin-bottom: 30px;
 }
 
-.Title{
+.Title {
   font-size: 50px;
   margin-bottom: 30px;
 }
 
-.videoInfo{
+.videoInfo {
   width: 500px;
   margin-left: 50px;
   color: #fff;
   font-size: 20px;
 }
 
-.videoPoster{
+.videoPoster {
   width: 400px;
   height: 600px;
   border-radius: 10px;
@@ -79,7 +79,7 @@ export default {
   background-size: 100% auto;
 }
 
-.container{
+.container {
   width: 100%;
   padding: 20px 0 0 80px;
   display: flex;

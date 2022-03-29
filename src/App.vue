@@ -1,139 +1,184 @@
 <template>
   <div class="header">
-    <div class="webName" @click="likeMovieList(1), videoList = [], selectedGenres = '', nowPage = 1">
+    <div
+      class="webName"
+      @click="
+        resetGenres() ,homeVideoList(1), (videoList = []), (nowPage = 1)
+      "
+    >
       <span>content searcher</span>
       <p class="webTitle">Video Finder</p>
     </div>
   </div>
 
   <div class="search_area">
-    <form @submit.prevent="searchVideo(1), videoList=[], selectedGenres = '', nowPage = 1">
-      <input v-model="videoName" required class="search_bar" type="text" placeholder="Search for the title of the content">
-      <button type="submit" class="fa-solid fa-magnifying-glass searchIcon"></button>
+    <form
+      @submit.prevent="
+        resetGenres(), searchVideo(1), (videoList = []), (nowPage = 1)
+      "
+    >
+      <input
+        v-model="videoName"
+        required
+        class="search_bar"
+        type="text"
+        placeholder="Search for the title of the content"
+      />
+      <button
+        type="submit"
+        class="fa-solid fa-magnifying-glass searchIcon"
+      ></button>
     </form>
   </div>
-  
+
   <div class="btnContainer" v-if="!selected">
-    <Genres @passChoseGenres = getChoseGenres v-for="genres in genresList" :key="genres" :genres = genres :selectedGenres = selectedGenres />
+    <Genres
+      @passChoseGenres="getChoseGenres"
+      v-for="genres in genresList"
+      :key="genres"
+      :genres="genres"
+      :selectedGenres="selectedGenres"
+    />
   </div>
 
-  <Container @passSelected = getSelected :videoList = videoList :selected = selected />
+  <Container
+    @passSelected="getSelected"
+    :videoList="videoList"
+    :selected="selected"
+  />
 </template>
 
 <script>
-import axios from 'axios'
-import Container from './components/Container.vue'
-import Genres from './components/Genres.vue'
+import axios from "axios";
+import Container from "./components/Container.vue";
+import Genres from "./components/Genres.vue";
 
 export default {
-  name: 'App',
-  data(){
-    return{
-      videoList : [],
-      videoName : '' ,
-      nowPage : 1,
-      lastPage : 0,
-      search : false,
-      selected : false,
-      genresList : ['Action', 'Adventure', 'Comedy', 'Sci-Fi', 'Crime', 'Thriller'],
-      selectedGenres : ''
-    }
+  name: "App",
+  data() {
+    return {
+      videoList: [],  // 비디오 목록 저장
+      videoName: "",  // 비디오 이름 저장
+      nowPage: 1, // 현재 페이지
+      lastPage: 0,  // 검색한 비디오 목록 마지막 페이지
+      search: false,  // 비디오 이름으로 검색했는 지 확인
+      selected: false,  // 비디오 포스터를 클릭했는 지 확인
+      genresList: [ // 비디오 장르 목록
+        "Action",
+        "Adventure",
+        "Comedy",
+        "Sci-Fi",
+        "Crime",
+        "Thriller",
+      ],
+      selectedGenres: '', // 장르를 선택했는 지 확인
+    };
   },
   components: {
     Container,
-    Genres
+    Genres,
   },
   methods: {
-    searchVideo(page){
-      this.search = true
-      this.selected = false
+    // 비디오 이름으로 검색할 경우
+    // 비디오 이름과 선택한 장르로 검색
+    searchVideo(page) {
+      this.search = true;
+      this.selected = false;
       axios
-        .get(`https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}&genre=${this.selectedGenres}`)
+        .get(
+          `https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}&genre=${this.selectedGenres}`
+        )
         .then((response) => {
-          this.lastPage = Math.ceil(response.data.data.movie_count / 25)
-          for (let i=0; i<response.data.data.movies.length;i++){
-            this.videoList.push(response.data.data.movies[i])
-        }
-      })
-    },
-    likeMovieList(page){
-      this.search = false
-      this.selected = false
-      axios
-        .get(`https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}&genre=${this.selectedGenres}`)
-        .then((response) => {
-          this.lastPage = Math.ceil(response.data.data.movie_count / 25)
-          for (let i=0; i<response.data.data.limit;i++){
-            this.videoList.push(response.data.data.movies[i])
-        }
-      })
-    },
-    onScroll(){
-      if(!this.selected){
-        if(this.search){
-          if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
-            this.nowPage += 1
-            this.searchVideo(this.nowPage)
+          this.lastPage = Math.ceil(response.data.data.movie_count / 25);
+          for (let i = 0; i < response.data.data.movies.length; i++) {
+            this.videoList.push(response.data.data.movies[i]);
           }
-        }
-        else{
-          if((window.innerHeight + window.scrollY) >= document.body.offsetHeight && this.lastPage > this.nowPage){
-            this.nowPage += 1
-            this.likeMovieList(this.nowPage)
+        });
+    },
+    // 비디오 이름으로 검색하지 않을 경우
+    // 선택한 장르를 기준으로 인기 높은 순으로 검색
+    homeVideoList(page) {
+      this.search = false;
+      this.selected = false;
+      axios
+        .get(
+          `https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}&genre=${this.selectedGenres}`
+        )
+        .then((response) => {
+          this.lastPage = Math.ceil(response.data.data.movie_count / 25);
+          for (let i = 0; i < response.data.data.limit; i++) {
+            this.videoList.push(response.data.data.movies[i]);
+          }
+        });
+    },
+    // 비디오를 선택하지 않을 경우
+    // 스크롤을 끝깨지 내릴 시 다음 페이지 목록 검색
+    onScroll() {
+      if (!this.selected) {
+        if (this.search) {
+          if (
+            window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+            this.lastPage > this.nowPage
+          ) {
+            this.nowPage += 1;
+            this.searchVideo(this.nowPage);
+          }
+        } else {
+          if (
+            window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+            this.lastPage > this.nowPage
+          ) {
+            this.nowPage += 1;
+            this.homeVideoList(this.nowPage);
           }
         }
       }
     },
-    getSelected(response){
-      this.selected = response
+    // 비디오를 선택할 경우
+    // true로 변경
+    getSelected(response) {
+      this.selected = response;
     },
-    getChoseGenres(response){
-      this.videoList = []
-      // if(this.selectedGenres.includes(response)){
-      //   this.selectedGenres = this.selectedGenres.filter((element) => element != response)
-      // }else{
-      //   this.selectedGenres.push(response)
-      // }
+    // 비디오를 검색하거나 배너를 눌렀을 경우 장르 초기화
+    resetGenres(){
+      this.selectedGenres = '';
+    },
+    // 장르를 선택할 경우
+    // 장르 저장
+    getChoseGenres(response) {
+      this.videoList = [];
+      this.selectedGenres = response;
 
-      this.selectedGenres =  response
-      console.log(this.selectedGenres)
-
-      if(this.search){
-        this.searchVideo(1)
-      }else{
-        this.likeMovieList(1)
+      if (this.search) {
+        this.searchVideo(1);
+      } else {
+        this.homeVideoList(1);
       }
-    }
-    
+    },
   },
-  mounted(){
-    this.$nextTick(function(){
-      this.nowPage = 1
-      axios
-        .get('https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25')
-        .then((response) => {
-          this.lastPage = Math.ceil(response.data.data.movie_count / 25)
-          for (let i=0; i<response.data.data.limit;i++){
-            this.videoList.push(response.data.data.movies[i])
-        }
-      })
-    })
-    window.addEventListener('scroll', this.onScroll)
+  mounted() {
+    // 페이지를 처음에 들어갈 경우
+    // 인기 순으로 비디오 목록 검색
+    this.$nextTick(function () {
+      this.nowPage = 1;
+      this.homeVideoList(1)
+    });
+    window.addEventListener("scroll", this.onScroll);
   },
-  beforeUnmount(){
-    window.removeEventListener('scroll', this.onScroll)
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.onScroll);
   },
-}
+};
 </script>
 
 <style>
-.btnContainer{
+.btnContainer {
   display: flex;
   flex-wrap: wrap;
   margin-top: 20px;
 }
 
-.search_bar{
+.search_bar {
   width: 100%;
   height: 36px;
   background-color: #141414;
@@ -143,20 +188,20 @@ export default {
   border-radius: 7px;
 }
 
-.search_area{
+.search_area {
   height: 36px;
   width: 100%;
   position: relative;
   flex-direction: column;
 }
 
-button{
+button {
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
 
-.searchIcon{
+.searchIcon {
   color: #fff;
   position: absolute;
   width: 50px;
@@ -167,7 +212,7 @@ button{
   font-size: 25px;
 }
 
-.header{
+.header {
   width: 100%;
   height: 50px;
   line-height: 50px;
@@ -176,17 +221,17 @@ button{
   font-size: 20px;
 }
 
-.webName{
+.webName {
   display: flex;
   cursor: pointer;
 }
 
-.webTitle{
+.webTitle {
   margin-left: 5px;
   color: #a734ff;
 }
 
-body{
+body {
   background-color: #141414;
 }
 
