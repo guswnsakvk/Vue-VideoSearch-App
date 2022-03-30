@@ -115,7 +115,7 @@ export default {
       if (!this.selected) {
         if (this.search) {
           if (
-            window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+            window.innerHeight + window.scrollY >= (document.body.offsetHeight - 10) &&
             this.lastPage > this.nowPage
           ) {
             this.nowPage += 1;
@@ -123,7 +123,7 @@ export default {
           }
         } else {
           if (
-            window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+            window.innerHeight + window.scrollY >= (document.body.offsetHeight - 10) &&
             this.lastPage > this.nowPage
           ) {
             this.nowPage += 1;
