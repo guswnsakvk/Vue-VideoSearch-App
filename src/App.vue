@@ -2,7 +2,7 @@
   <div class="header">
     <div
       class="webName"
-      @click="resetGenres(), homeVideoList(1), (videoList = []), (nowPage = 1)"
+      @click="setValue(false), homeVideoList(1), (videoName = '')"
     >
       <span>content searcher</span>
       <p class="webTitle">Video Finder</p>
@@ -10,11 +10,7 @@
   </div>
 
   <div class="search_area">
-    <form
-      @submit.prevent="
-        resetGenres(), searchVideo(1), (videoList = []), (nowPage = 1)
-      "
-    >
+    <form @submit.prevent="setValue(true), searchVideo(1)">
       <input
         v-model="videoName"
         required
@@ -79,35 +75,45 @@ export default {
   methods: {
     // 비디오 이름으로 검색할 경우
     // 비디오 이름과 선택한 장르로 검색
-    searchVideo(page) {
+    async searchVideo(page) {
       this.search = true;
       this.selected = false;
-      axios
+      await axios
         .get(
-          `https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&limit=25&page=${page}&genre=${this.selectedGenres}`
+          `https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&page=${page}&genre=${this.selectedGenres}`
         )
         .then((response) => {
-          this.lastPage = Math.ceil(response.data.data.movie_count / 25);
-          for (let i = 0; i < response.data.data.movies.length; i++) {
-            this.videoList.push(response.data.data.movies[i]);
-          }
+          this.setVideoList(response);
         });
     },
     // 비디오 이름으로 검색하지 않을 경우
     // 선택한 장르를 기준으로 인기 높은 순으로 검색
-    homeVideoList(page) {
+    async homeVideoList(page) {
       this.search = false;
       this.selected = false;
-      axios
+      await axios
         .get(
-          `https://yts.mx/api/v2/list_movies.json?sort_by=like_count&limit=25&page=${page}&genre=${this.selectedGenres}`
+          `https://yts.mx/api/v2/list_movies.json?sort_by=like_count&page=${page}&genre=${this.selectedGenres}`
         )
         .then((response) => {
-          this.lastPage = Math.ceil(response.data.data.movie_count / 25);
-          for (let i = 0; i < response.data.data.limit; i++) {
-            this.videoList.push(response.data.data.movies[i]);
-          }
+          this.setVideoList(response);
         });
+    },
+    // 호출한 비디오 목록 저장
+    setVideoList(response) {
+      this.lastPage = Math.ceil(response.data.data.movie_count / 25);
+      for (let i = 0; i < response.data.data.movies.length; i++) {
+        this.videoList.push(response.data.data.movies[i]);
+      }
+    },
+    // searchVideo, homeVideoList 실행시
+    // 변경되는 값 변경
+    setValue(value) {
+      this.videoList = [];
+      this.nowPage = 1;
+      this.selected = false;
+      this.search = value;
+      this.selectedGenres = "";
     },
     // 비디오를 선택하지 않을 경우
     // 스크롤을 끝깨지 내릴 시 다음 페이지 목록 검색
@@ -115,7 +121,8 @@ export default {
       if (!this.selected) {
         if (this.search) {
           if (
-            window.innerHeight + window.scrollY >= (document.body.offsetHeight - 10) &&
+            window.innerHeight + window.scrollY >=
+              document.body.offsetHeight - 10 &&
             this.lastPage > this.nowPage
           ) {
             this.nowPage += 1;
@@ -123,7 +130,8 @@ export default {
           }
         } else {
           if (
-            window.innerHeight + window.scrollY >= (document.body.offsetHeight - 10) &&
+            window.innerHeight + window.scrollY >=
+              document.body.offsetHeight - 10 &&
             this.lastPage > this.nowPage
           ) {
             this.nowPage += 1;
@@ -136,10 +144,6 @@ export default {
     // true로 변경
     getSelected(response) {
       this.selected = response;
-    },
-    // 비디오를 검색하거나 배너를 눌렀을 경우 장르 초기화
-    resetGenres() {
-      this.selectedGenres = "";
     },
     // 장르를 선택할 경우
     // 장르 저장
