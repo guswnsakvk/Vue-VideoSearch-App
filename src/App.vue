@@ -76,8 +76,6 @@ export default {
     // 비디오 이름으로 검색할 경우
     // 비디오 이름과 선택한 장르로 검색
     async searchVideo(page) {
-      this.search = true;
-      this.selected = false;
       await axios
         .get(
           `https://yts.mx/api/v2/list_movies.json?query_term=${this.videoName}&page=${page}&genre=${this.selectedGenres}`
@@ -89,8 +87,6 @@ export default {
     // 비디오 이름으로 검색하지 않을 경우
     // 선택한 장르를 기준으로 인기 높은 순으로 검색
     async homeVideoList(page) {
-      this.search = false;
-      this.selected = false;
       await axios
         .get(
           `https://yts.mx/api/v2/list_movies.json?sort_by=like_count&page=${page}&genre=${this.selectedGenres}`
@@ -160,10 +156,7 @@ export default {
   mounted() {
     // 페이지를 처음에 들어갈 경우
     // 인기 순으로 비디오 목록 검색
-    this.$nextTick(function () {
-      this.nowPage = 1;
-      this.homeVideoList(1);
-    });
+    this.homeVideoList(1);
     window.addEventListener("scroll", this.onScroll);
   },
   beforeUnmount() {

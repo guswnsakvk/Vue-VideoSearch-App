@@ -19,6 +19,7 @@ export default {
     video: Object,
   },
   methods: {
+    // 클릭한 비디오 정보 Container.vue로 전달
     clickVideoPoster() {
       this.$emit("passDetailData", this.video);
     },

@@ -37,6 +37,8 @@ export default {
     DeatilVideo,
   },
   methods: {
+    // SearchResult.vue에서 받은 데이터를 저장
+    // App.vue에 selected를 true로 바꾸기 위해 true값 전달
     getDetailData(response) {
       this.selectedVideo = response;
       this.$emit("passSelected", true);
